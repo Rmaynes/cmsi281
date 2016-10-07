@@ -75,9 +75,11 @@ class Bag implements Collectible {
         }
     }
 
-    public void checkEquals(String item) {
-        if (first.item.length == item.length) {
+    public boolean checkEquals(String item) {
+        if (first.item.length() == item.length()) {
             return true;
+        } else {
+            return false;
         }
     }
 
