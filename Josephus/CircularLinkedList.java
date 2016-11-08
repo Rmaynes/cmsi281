@@ -86,7 +86,7 @@ public class CircularLinkedList extends AbstractLinkedList implements CircularCo
         public String removeKthElement(int k) {
             int count = 0;
             String temp = "";
-
+//k greater than size of actual array
             while (count != k) {
                 previous = current;
                 current = current.next;
