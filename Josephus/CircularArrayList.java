@@ -22,38 +22,36 @@ public class CircularArrayList extends AbstractArrayList implements CircularColl
     }
 
     public void add(String s) {
-        // if you still have room in your static array
+
         if (size < arraySize) {
-            // you can just add it like normal
             elements[size] = s;         
             size++;
         } else {
-            // otherwise...
-            // you have to double the array to make more space
             arraySize = arraySize * 2;
             String[] doubleElements = new String[arraySize];
 
-            // and then copy the elements over one by one...
             for (int i = 0; i < size; i++) {
                 doubleElements[i] = elements[i];
             }
-
-            // ...and then you can add the new element like normal
-            elements[size] = s;         
+            elements[size] = s;
             size++;
         }
     }
 
     public void remove(String s) {
+        int temp = 0;
+
         for (int i = 0; i < elements.length; i++) {
-            if (!elements[i].equals(s)) {
+            if (elements[i].equals(s)) {
+                temp = i;
                 break;
             }
 
-            for (int j = i; j < elements.length; j++) {
+            for (int j = temp; j < elements.length - 1; j++) {
                 elements[j] = elements[j + 1];
             }
         }
+        size--;
     }
     
     public String first() {
@@ -90,7 +88,24 @@ public class CircularArrayList extends AbstractArrayList implements CircularColl
         }
 
         public String removeKthElement(int k) {
-            throw new UnsupportedOperationException();
+            int count = 0;
+            String temp = "";
+            String head = elements[0];
+            String tail = elements[elements.length - 1];
+
+            for (int i = 0; i < elements.length; i++) {
+                count++;
+                if (count == k - 1) {
+                    temp = elements[i];
+                    elements[i] = elements[i + 1];
+                    count = 0;
+                }
+
+                if (count > elements.length) {
+                    i = 0;
+                }
+            }
+            return temp;
         }
 
         public boolean oneElementLeft() {
