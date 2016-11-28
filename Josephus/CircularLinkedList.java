@@ -12,46 +12,44 @@ public class CircularLinkedList extends AbstractLinkedList implements CircularCo
 
 
     public boolean isEmpty() {
-        if (first == null) {
+        if (head == null) {
             return true;
         } else {
             return false;
         }
-    } 
+    }
 
     public int size() {
         return n;
     }
 
     public void add(String s) {
-        Node newFirst = new Node(first, s);
-        first = newFirst;
+        Node newNode = new Node(null, s);
+        if (head == null) {
+            head = newNode;
+        } else {
+            tail.next = newNode;
+        }
+        tail = newNode;
         n++;
     }
 
-    public void remove(String s) {
-        Node current = first;
-        Node previous = null;
-
-        if (first.value.equals(s)) {
-            first = first.next;
-            n--;
+    public void remove() {
+        if (head == null) {
             return;
         }
 
-        while (current != null) {
-            if (current.value.equals(s)) {
-                previous = current.next;
-                n--;
-                return;
-            }
-            previous = current;
-            current = current.next;
+        Node dequeuedNode = head;
+        head = head.next;
+        n--;
+
+        if (head == null) {
+            tail = null;
         }
     }
 
     public String first() {
-        return first.value;
+        return head.value;
     }
 
     public CircularIterator iterator() {
@@ -60,10 +58,9 @@ public class CircularLinkedList extends AbstractLinkedList implements CircularCo
 
     class CircularLinkedListIterator implements CircularIterator {
         private Node current;
-        private Node previous;
         
         public CircularLinkedListIterator() {
-            current = first;
+            current = head;
         }
 
         public boolean hasNext() {
@@ -77,33 +74,66 @@ public class CircularLinkedList extends AbstractLinkedList implements CircularCo
             return node.value;
         }
 
-        public void remove(String s) {
-            previous.next = current.next;
-            current = current.next;
+        public void remove() {
+            if (head == null) {
+                return;
+            }
+
+            Node dequeuedNode = head;
+            head = head.next;
             n--;
+
+            if (head == null) {
+                tail = null;
+            }
         }
 
         public String removeKthElement(int k) {
-            int count = 0;
+            int count = 1;
             String temp = "";
-//k greater than size of actual array
+            Node link = new Node(null, null);
+            tail.next = head;
+
             while (count != k) {
-                previous = current;
+                if (n == 1) {
+                    temp = head.value;
+                    break;
+                }
+                link = current;
                 current = current.next;
                 count++;
             }
-
-            if (count == k) {
+            // Node is not being removed from either end
+            if (count == k && current != head && current != tail) {
                 temp = current.value;
-                previous.next = current.next;
-                count = 0;
+                current = current.next;
+                link.next = current;
+                count = 1;
+                n--;
             }
-            n--;
+            // Node removed from head
+            if (count == k && current == head) {
+                temp = head.value;
+                current = head.next;
+                head = current;
+                tail.next = head;
+                link.next = current;
+                count = 1;
+                n--;
+            }
+            // Node removed from tail
+            if (count == k && current == tail) {
+                temp = current.value;
+                current = current.next;
+                link.next = current;
+                count = 1;
+                n--;
+            }
             return temp;
         }
 
         public boolean oneElementLeft() {
-            if (current.next == null) {
+            if (head.next == tail.next) {
                 return true;
             } else {
                 return false;
