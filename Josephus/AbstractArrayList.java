@@ -12,6 +12,9 @@ public abstract class AbstractArrayList implements Collectible {
     }
 
     protected AbstractArrayList(String[] elements) {
+        this.elements = new String[DEFAULT_MAX_SIZE];
+        arraySize = DEFAULT_MAX_SIZE;
+        size = 0;
         for (String s : elements) {
             if (s != null) {
                 // take advantage of your own add() method
