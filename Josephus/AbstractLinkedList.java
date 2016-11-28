@@ -1,9 +1,11 @@
 public abstract class AbstractLinkedList implements Collectible {
-    Node first;
+    Node head;
+    Node tail;
     int n;
 
     public AbstractLinkedList() {
-      first = null;
+      head = null;
+      tail = null;
       n = 0;
     }
     
@@ -18,10 +20,16 @@ public abstract class AbstractLinkedList implements Collectible {
     }
 
     public void add(String s) {
-        Node newFirst = new Node(first, s);
-        first = newFirst;
+        Node newNode = new Node(null, s);
+        if (head == null) {
+            head = newNode;
+        } else {
+            tail.next = newNode;
+        }
+        tail = newNode;
         n++;
     }
+
 
 
     class Node {
