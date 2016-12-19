@@ -1,0 +1,4 @@
+TO run the program...
+ javac MaxHeap.java
+To input your own numbers into the heap type in numbers separated by one space.
+ java MaxHeap 8 7 6 8 99 00 6 4 3 7 8
